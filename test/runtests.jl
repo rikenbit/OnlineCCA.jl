@@ -50,8 +50,8 @@ csv2bin(csvfile=joinpath(tmp, "Z.csv"),
   binfile=joinpath(tmp, "Z.zst"))
 
 testfilesize(false, joinpath(tmp, "X.zst"))
-testfilesize(true, joinpath(tmp, "Y.zst"))
-testfilesize(true, joinpath(tmp, "Z.zst"))
+testfilesize(false, joinpath(tmp, "Y.zst"))
+testfilesize(false, joinpath(tmp, "Z.zst"))
 ####################################
 
 
