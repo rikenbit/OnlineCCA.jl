@@ -125,14 +125,6 @@ function parse_commandline(cca::Union{SGD,RSGD})
             help = "Off set value for avoding overflow when calculating stochastic gradient"
             arg_type = Union{Number,AbstractString}
             default = 1.0f-6
-        "--initW"
-            help = "The CSV file saving the initial values of eigenvectors."
-            arg_type = Union{Nothing,AbstractString}
-            default = nothing
-        "--initV"
-            help = "The CSV file saving the initial values of loadings."
-            arg_type = Union{Nothing,AbstractString}
-            default = nothing
         "--logdir", "-l"
             help = "The directory where intermediate files are saved, in every evalfreq (e.g. 5000) iteration."
             arg_type = Union{Nothing,AbstractString}
@@ -231,14 +223,6 @@ function parse_commandline(cca::Union{GD})
             help = "Off set value for avoding overflow when calculating stochastic gradient"
             arg_type = Union{Number,AbstractString}
             default = 1.0f-6
-        "--initW"
-            help = "The CSV file saving the initial values of eigenvectors."
-            arg_type = Union{Nothing,AbstractString}
-            default = nothing
-        "--initV"
-            help = "The CSV file saving the initial values of loadings."
-            arg_type = Union{Nothing,AbstractString}
-            default = nothing
         "--logdir", "-l"
             help = "The directory where intermediate files are saved, in every evalfreq (e.g. 5000) iteration."
             arg_type = Union{Nothing,AbstractString}
@@ -258,91 +242,82 @@ end
 
 # Return N, M
 function nm(input::AbstractString)
-    N = zeros(UInt32, 1)
-    M = zeros(UInt32, 1)
-    open(input) do file
-        stream = ZstdDecompressorStream(file)
-        read!(stream, N)
-        read!(stream, M)
-        close(stream)
+    l <- length(input)
+    N = zeros(UInt32, l)
+    M = zeros(UInt32, l)
+    for i=1:l
+        open(input[i]) do file
+            stream = ZstdDecompressorStream(file)
+            read!(stream, N[i])
+            read!(stream, M[i])
+            close(stream)
+        end
     end
-    return N[], M[]
+    return N, M
 end
 
 # Initialization (other CCA)
-function init(input::AbstractString, pseudocount::Number, stepsize::Number, g::Number, epsilon::Number, dim::Number, rowmeanlist::AbstractString, rowvarlist::AbstractString, colsumlist::AbstractString, initW::Union{Nothing,AbstractString}, initV::Union{Nothing,AbstractString}, logdir::Union{Nothing,AbstractString}, cca::Union{GD,SGD,RSGD}, lower::Number, upper::Number, evalfreq::Number, offsetFull::Number, offsetStoch::Number, scale::AbstractString="ftt")
-    N, M = nm(input)
-    tmpN = zeros(UInt32, 1)
-    tmpM = zeros(UInt32, 1)
-    pseudocount = Float32(pseudocount)
-    stepsize = Float32(stepsize)
-    g = Float32(g)
-    epsilon = Float32(epsilon)
-    lower = Float32(lower)
-    upper = Float32(upper)
-    evalfreq = Int64(evalfreq)
-    offsetFull = Float32(offsetFull)
-    offsetStoch = Float32(offsetStoch)
-    # Eigen vectors
-    if initW == nothing
-        W = zeros(Float32, M, dim)
-        for i=1:dim
-            W[i, i] = 1
-        end
-    end
-    if typeof(initW) == String
-        if initV == nothing
-            W = readcsv(initW, Float32)
-        else
-            error("initW and initV are not specified at once. You only have one choice.")
-        end
-    end
-    if typeof(initV) == String
-            V = readcsv(initV, Float32)
-            V = V[:,1:dim]
-    end
-    v = zeros(Float32, M, dim) # Temporal Vector (Same length
-    D = Diagonal(reverse(1:dim)) # Diagonaml Matrix
-    x = zeros(UInt32, M)
-    normx = zeros(Float32, M)
-    rowmeanvec = zeros(Float32, N, 1)
-    rowvarvec = zeros(Float32, N, 1)
-    colsumvec = zeros(Float32, M, 1)
-    if rowmeanlist != ""
-        rowmeanvec = readcsv(rowmeanlist, Float32)
-    end
-    if rowvarlist != ""
-        rowvarvec = readcsv(rowvarlist, Float32)
-    end
-    if colsumlist != ""
-        colsumvec = readcsv(colsumlist, Float32)
-    end
-    # N, M, All Variance
-    TotalVar = 0
-    open(input) do file
-        stream = ZstdDecompressorStream(file)
-        read!(stream, tmpN)
-        read!(stream, tmpM)
-        for n = 1:N
-            # Data Import
-            read!(stream, x)
-            normx = normalizex(x, n, stream, scale, pseudocount, rowmeanlist, rowmeanvec, rowvarlist, rowvarvec, colsumlist, colsumvec)
-            TotalVar = TotalVar + normx'normx
-            # Creating W from V
-            if typeof(initV) == String
-                W = W .+ (V[n,:]*normx')'
-            end
-        end
-        close(stream)
-    end
-    TotalVar = TotalVar / M
-    # directory for log file
-    if logdir isa String
-        if !isdir(logdir)
-            mkdir(logdir)
-        end
-    end
-    return pseudocount, stepsize, g, epsilon, W, v, D, rowmeanvec, rowvarvec, colsumvec, N, M, TotalVar, lower, upper, evalfreq, offsetFull, offsetStoch
+function init(input::AbstractString, pseudocount::Number, stepsize::Number, g::Number, epsilon::Number, dim::Number, rowmeanlist::AbstractString, rowvarlist::AbstractString, colsumlist::AbstractString, logdir::Union{Nothing,AbstractString}, cca::Union{GD,SGD,RSGD}, lower::Number, upper::Number, evalfreq::Number, offsetFull::Number, offsetStoch::Number, scale::AbstractString="ftt")
+	if !(length(input) >= 2)
+        error('Please specify the input as length-2 or longer array (e.g. ["X.zst", "Y.zst", "Z.zst"])')
+	end
+    N, M = nm(input) # 複数
+    @show N
+    @show M
+    # tmpN = zeros(UInt32, 1) # 複数
+    # tmpM = zeros(UInt32, 1) # 複数
+    # pseudocount = Float32(pseudocount)
+    # stepsize = Float32(stepsize) # 複数
+    # g = Float32(g) # 複数
+    # epsilon = Float32(epsilon) # 複数
+    # lower = Float32(lower)
+    # upper = Float32(upper)
+    # evalfreq = Int64(evalfreq)
+    # offsetFull = Float32(offsetFull)
+    # offsetStoch = Float32(offsetStoch)
+    # # Eigen vectors（複数）
+    # W = zeros(Float32, M, dim)
+    # for i=1:dim
+    #     W[i, i] = 1
+    # end
+    # v = zeros(Float32, M, dim) # Temporal Vector (Same length
+    # D = Diagonal(reverse(1:dim)) # Diagonaml Matrix
+    # x = zeros(UInt32, M)
+    # normx = zeros(Float32, M)
+    # rowmeanvec = zeros(Float32, N, 1)
+    # rowvarvec = zeros(Float32, N, 1)
+    # colsumvec = zeros(Float32, M, 1)
+    # if rowmeanlist != ""
+    #     rowmeanvec = readcsv(rowmeanlist, Float32)
+    # end
+    # if rowvarlist != ""
+    #     rowvarvec = readcsv(rowvarlist, Float32)
+    # end
+    # if colsumlist != ""
+    #     colsumvec = readcsv(colsumlist, Float32)
+    # end
+    # # N, M, All Variance
+    # TotalVar = 0
+    # open(input) do file
+    #     stream = ZstdDecompressorStream(file)
+    #     read!(stream, tmpN)
+    #     read!(stream, tmpM)
+    #     for n = 1:N
+    #         # Data Import
+    #         read!(stream, x)
+    #         normx = normalizex(x, n, stream, scale, pseudocount, rowmeanlist, rowmeanvec, rowvarlist, rowvarvec, colsumlist, colsumvec)
+    #         TotalVar = TotalVar + normx'normx
+    #     end
+    #     close(stream)
+    # end
+    # TotalVar = TotalVar / M
+    # # directory for log file
+    # if logdir isa String
+    #     if !isdir(logdir)
+    #         mkdir(logdir)
+    #     end
+    # end
+    # return pseudocount, stepsize, g, epsilon, W, v, D, rowmeanvec, rowvarvec, colsumvec, N, M, TotalVar, lower, upper, evalfreq, offsetFull, offsetStoch
 end
 
 # Eigen value, Loading, Scores

@@ -139,18 +139,23 @@ testfilesize(false,
 # #####################################
 
 
-# #####################################
-# println("####### GD (Julia API) #######")
-# out_gd1 = gd(input=(joinpath(tmp, "X.zst"),
-#   joinpath(tmp, "Y.zst"),
-#   joinpath(tmp, "Z.zst")),
-#   dim=3, scheduling="robbins-monro",
-#   stepsize=1.0e-15, numepoch=1,
-#   rowmeanlist=(joinpath(tmp, "SumX/Feature_FTTMeans.csv"),
-#     joinpath(tmp, "SumY/Feature_FTTMeans.csv"),
-#     joinpath(tmp, "SumZ/Feature_FTTMeans.csv")),
-#   rowsdlist=(joinpath(tmp, "SumX/Feature_FTTSDs.csv"), joinpath(tmp, "SumY/Feature_FTTSDs.csv"), joinpath(tmp, "SumZ/Feature_FTTSDs.csv")),
-#   logdir=tmp)
+#####################################
+println("####### GD (Julia API) #######")
+out_gd1 = gd(
+  input=(joinpath(tmp, "X.zst"),
+    joinpath(tmp, "Y.zst"),
+    joinpath(tmp, "Z.zst")),
+  dim=3,
+  scheduling="robbins-monro",
+  stepsize=1.0e-15,
+  numepoch=1,
+  rowmeanlist=(joinpath(tmp, "SumX/Feature_FTTMeans.csv"),
+    joinpath(tmp, "SumY/Feature_FTTMeans.csv"),
+    joinpath(tmp, "SumZ/Feature_FTTMeans.csv")),
+  rowsdlist=(joinpath(tmp, "SumX/Feature_FTTSDs.csv"),
+    joinpath(tmp, "SumY/Feature_FTTSDs.csv"),
+    joinpath(tmp, "SumZ/Feature_FTTSDs.csv")),
+  logdir=tmp)
 
 # out_gd2 = gd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="momentum",
