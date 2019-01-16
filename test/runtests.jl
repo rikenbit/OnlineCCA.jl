@@ -57,9 +57,9 @@ testfilesize(false, joinpath(tmp, "Z.zst"))
 
 # #####################################
 # println("####### Binarization (Command line) #######")
-# run(`$(julia) $(joinpath(bindir, "csv2bin")) --csvfileX $(joinpath(tmp, "X.csv")) --csvfileY $(joinpath(tmp, "Y.csv")) --binfile $(joinpath(tmp, "XY.zst"))`)
+# run(`$(julia) $(joinpath(bindir, "csv2bin")) --csvfileX $(joinpath(tmp, "X.csv")) --csvfileY $(joinpath(tmp, "Y.csv")) --binfile $(joinpath(tmp, "X.zst"))`)
 
-# testfilesize(false, joinpath(tmp, "XY.zst"))
+# testfilesize(false, joinpath(tmp, "X.zst"))
 # #####################################
 
 
@@ -68,37 +68,60 @@ println("####### Summarization (Julia API) #######")
 mkdir(joinpath(tmp, "SumX"))
 mkdir(joinpath(tmp, "SumY"))
 mkdir(joinpath(tmp, "SumZ"))
-sumr(binfile=joinpath(tmp, "X.zst"), outdir=joinpath(tmp, "SumX"))
-sumr(binfile=joinpath(tmp, "Y.zst"), outdir=joinpath(tmp, "SumY"))
-sumr(binfile=joinpath(tmp, "Z.zst"), outdir=joinpath(tmp, "SumZ"))
+sumr(binfile=joinpath(tmp, "X.zst"),
+  outdir=joinpath(tmp, "SumX"))
+sumr(binfile=joinpath(tmp, "Y.zst"),
+  outdir=joinpath(tmp, "SumY"))
+sumr(binfile=joinpath(tmp, "Z.zst"),
+  outdir=joinpath(tmp, "SumZ"))
 
-testfilesize(true,
-  joinpath(tmp, "SumX/Sample_NoCounts.csv"),
-  joinpath(tmp, "SumX/Feature_CV2s.csv"),
-  joinpath(tmp, "SumX/Feature_LogMeans.csv"),
-  joinpath(tmp, "SumX/Feature_Means.csv"),
-  joinpath(tmp, "SumX/Feature_NoZeros.csv"),
-  joinpath(tmp, "SumX/Feature_Vars.csv"))
-testfilesize(true,
-  joinpath(tmp, "SumY/Sample_NoCounts.csv"),
-  joinpath(tmp, "SumY/Feature_CV2s.csv"),
-  joinpath(tmp, "SumY/Feature_LogMeans.csv"),
-  joinpath(tmp, "SumY/Feature_Means.csv"),
-  joinpath(tmp, "SumY/Feature_NoZeros.csv"),
-  joinpath(tmp, "SumY/Feature_Vars.csv"))
-testfilesize(true,
-  joinpath(tmp, "SumZ/Sample_NoCounts.csv"),
-  joinpath(tmp, "SumZ/Feature_CV2s.csv"),
-  joinpath(tmp, "SumZ/Feature_LogMeans.csv"),
-  joinpath(tmp, "SumZ/Feature_Means.csv"),
-  joinpath(tmp, "SumZ/Feature_NoZeros.csv"),
-  joinpath(tmp, "SumZ/Feature_Vars.csv"))
+testfilesize(false,
+  joinpath(outdir, "SumX/Sample_NoCounts.csv"),
+  joinpath(outdir, "SumX/Feature_Means.csv"),
+  joinpath(outdir, "SumX/Feature_LogMeans.csv"),
+  joinpath(outdir, "SumX/Feature_FTTMeans.csv"),
+  joinpath(outdir, "SumX/Feature_Vars.csv"),
+  joinpath(outdir, "SumX/Feature_LogVars.csv"),
+  joinpath(outdir, "SumX/Feature_FTTVars.csv"),
+  joinpath(outdir, "SumX/Feature_SDs.csv"),
+  joinpath(outdir, "SumX/Feature_LogSDs.csv"),
+  joinpath(outdir, "SumX/Feature_FTTSDs.csv"),
+  joinpath(outdir, "SumX/Feature_CV2s.csv"),
+  joinpath(outdir, "SumX/Feature_NoZeros.csv"))
+
+testfilesize(false,
+  joinpath(outdir, "SumY/Sample_NoCounts.csv"),
+  joinpath(outdir, "SumY/Feature_Means.csv"),
+  joinpath(outdir, "SumY/Feature_LogMeans.csv"),
+  joinpath(outdir, "SumY/Feature_FTTMeans.csv"),
+  joinpath(outdir, "SumY/Feature_Vars.csv"),
+  joinpath(outdir, "SumY/Feature_LogVars.csv"),
+  joinpath(outdir, "SumY/Feature_FTTVars.csv"),
+  joinpath(outdir, "SumY/Feature_SDs.csv"),
+  joinpath(outdir, "SumY/Feature_LogSDs.csv"),
+  joinpath(outdir, "SumY/Feature_FTTSDs.csv"),
+  joinpath(outdir, "SumY/Feature_CV2s.csv"),
+  joinpath(outdir, "SumY/Feature_NoZeros.csv"))
+
+testfilesize(false,
+  joinpath(outdir, "SumZ/Sample_NoCounts.csv"),
+  joinpath(outdir, "SumZ/Feature_Means.csv"),
+  joinpath(outdir, "SumZ/Feature_LogMeans.csv"),
+  joinpath(outdir, "SumZ/Feature_FTTMeans.csv"),
+  joinpath(outdir, "SumZ/Feature_Vars.csv"),
+  joinpath(outdir, "SumZ/Feature_LogVars.csv"),
+  joinpath(outdir, "SumZ/Feature_FTTVars.csv"),
+  joinpath(outdir, "SumZ/Feature_SDs.csv"),
+  joinpath(outdir, "SumZ/Feature_LogSDs.csv"),
+  joinpath(outdir, "SumZ/Feature_FTTSDs.csv"),
+  joinpath(outdir, "SumZ/Feature_CV2s.csv"),
+  joinpath(outdir, "SumZ/Feature_NoZeros.csv"))
 ####################################
 
 
 # #####################################
 # println("####### Summarization (Command line) #######")
-# run(`$(julia) $(joinpath(bindir, "sumr")) --binfile $(joinpath(tmp, "XY.zst")) --outdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "sumr")) --binfile $(joinpath(tmp, "X.zst")) --outdir $(tmp)`)
 
 # testfilesize(false,
 #   joinpath(tmp, "X_Sample_NoCounts.csv"),
@@ -118,16 +141,18 @@ testfilesize(true,
 
 # #####################################
 # println("####### GD (Julia API) #######")
-# out_gd1 = gd(input=joinpath(tmp, "XY.zst"),
+# out_gd1 = gd(input=(joinpath(tmp, "X.zst"),
+#   joinpath(tmp, "Y.zst"),
+#   joinpath(tmp, "Z.zst")),
 #   dim=3, scheduling="robbins-monro",
 #   stepsize=1.0e-15, numepoch=1,
-#   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
-#   rowmeanlistY=joinpath(tmp, "Y_Feature_FTTMeans.csv"),
-#   rowsdlistX=joinpath(tmp, "X_Feature_FTTSDs.csv"),
-#   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
+#   rowmeanlist=(joinpath(tmp, "SumX/Feature_FTTMeans.csv"),
+#     joinpath(tmp, "SumY/Feature_FTTMeans.csv"),
+#     joinpath(tmp, "SumZ/Feature_FTTMeans.csv")),
+#   rowsdlist=(joinpath(tmp, "SumX/Feature_FTTSDs.csv"), joinpath(tmp, "SumY/Feature_FTTSDs.csv"), joinpath(tmp, "SumZ/Feature_FTTSDs.csv")),
 #   logdir=tmp)
 
-# out_gd2 = gd(input=joinpath(tmp, "XY.zst"),
+# out_gd2 = gd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="momentum",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -136,7 +161,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_gd3 = gd(input=joinpath(tmp, "XY.zst"),
+# out_gd3 = gd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="nag",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -145,7 +170,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_gd4 = gd(input=joinpath(tmp, "XY.zst"),
+# out_gd4 = gd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="adagrad",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -186,28 +211,28 @@ testfilesize(true,
 
 # #####################################
 # println("####### GD (Command line) #######")
-# run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "XY.zst")) --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "X.zst")) --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(false,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "gd")) --initW $(joinpath(tmp, "Eigen_vectorsX.csv")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "gd")) --initW $(joinpath(tmp, "Eigen_vectorsX.csv")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(false,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "gd")) --initV $(joinpath(tmp, "Eigen_vectorsY.csv")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "gd")) --initV $(joinpath(tmp, "Eigen_vectorsY.csv")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
@@ -218,7 +243,7 @@ testfilesize(true,
 
 # #####################################
 # println("####### SGD (Julia API) #######")
-# out_sgd1 = sgd(input=joinpath(tmp, "XY.zst"),
+# out_sgd1 = sgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="robbins-monro",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -227,7 +252,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_sgd2 = sgd(input=joinpath(tmp, "XY.zst"),
+# out_sgd2 = sgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="momentum",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -236,7 +261,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_sgd3 = sgd(input=joinpath(tmp, "XY.zst"),
+# out_sgd3 = sgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="nag",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -245,7 +270,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_sgd4 = sgd(input=joinpath(tmp, "XY.zst"),
+# out_sgd4 = sgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="adagrad",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -286,28 +311,28 @@ testfilesize(true,
 
 # #####################################
 # println("####### SGD (Command line) #######")
-# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "XY.zst")) --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst")) --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
@@ -318,7 +343,7 @@ testfilesize(true,
 
 # #####################################
 # println("####### RSGD (Julia API) #######")
-# out_rsgd1 = rsgd(input=joinpath(tmp, "XY.zst"),
+# out_rsgd1 = rsgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="robbins-monro",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -327,7 +352,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_rsgd2 = rsgd(input=joinpath(tmp, "XY.zst"),
+# out_rsgd2 = rsgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="momentum",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -336,7 +361,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_rsgd3 = rsgd(input=joinpath(tmp, "XY.zst"),
+# out_rsgd3 = rsgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="nag",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -345,7 +370,7 @@ testfilesize(true,
 #   rowsdlistY=joinpath(tmp, "Y_Feature_FTTSDs.csv"),
 #   logdir=tmp)
 
-# out_rsgd4 = rsgd(input=joinpath(tmp, "XY.zst"),
+# out_rsgd4 = rsgd(input=joinpath(tmp, "X.zst"),
 #   dim=3, scheduling="adagrad",
 #   stepsize=1.0e-15, numepoch=1,
 #   rowmeanlistX=joinpath(tmp, "X_Feature_FTTMeans.csv"),
@@ -386,28 +411,28 @@ testfilesize(true,
 
 # #####################################
 # println("####### RSGD (Command line) #######")
-# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "XY.zst")) --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst")) --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),
 #   joinpath(tmp, "Eigen_values.csv"),
 #   joinpath(tmp, "Eigen_vectorsY.csv"))
 
-# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "XY.zst"))  --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
+# run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))  --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 1 --rowmeanlistX $(joinpath(tmp, "X_Feature_FTTMeans.csv")) --rowmeanlistY $(joinpath(tmp, "Y_Feature_FTTMeans.csv")) --rowsdlistX $(joinpath(tmp, "X_Feature_FTTSDs.csv")) --rowsdlistY $(joinpath(tmp, "Y_Feature_FTTSDs.csv")) --logdir $(tmp)`)
 
 # testfilesize(true,
 #   joinpath(tmp, "Eigen_vectorsX.csv"),

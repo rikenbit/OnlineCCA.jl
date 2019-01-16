@@ -20,7 +20,7 @@ function sumr(;binfile::AbstractString="", outdir::AbstractString=".", pseudocou
 
     # 2 / 2 : Row-wise statistics
     println("2 / 2 : Row-wise statistics are calculated...")
-    Feature_Means, Feature_LogMeans, Feature_FTTMeans, Feature_Vars, Feature_LogVars, Feature_FTTVars, Feature_CV2s, Feature_NoZeros = stats(binfile, pseudocount)
+    Feature_Means, Feature_LogMeans, Feature_FTTMeans, Feature_Vars, Feature_LogVars, Feature_FTTVars, Feature_SDs, Feature_LogSDs, Feature_FTTSDs,  Feature_CV2s, Feature_NoZeros = stats(binfile, pseudocount)
 
     # Save
     writecsv(joinpath(outdir, "Sample_NoCounts.csv"), Sample_NoCounts)
@@ -30,6 +30,9 @@ function sumr(;binfile::AbstractString="", outdir::AbstractString=".", pseudocou
     writecsv(joinpath(outdir, "Feature_Vars.csv"), Feature_Vars)
     writecsv(joinpath(outdir, "Feature_LogVars.csv"), Feature_LogVars)
     writecsv(joinpath(outdir, "Feature_FTTVars.csv"), Feature_FTTVars)
+    writecsv(joinpath(outdir, "Feature_SDs.csv"), Feature_SDs)
+    writecsv(joinpath(outdir, "Feature_LogSDs.csv"), Feature_LogSDs)
+    writecsv(joinpath(outdir, "Feature_FTTSDs.csv"), Feature_FTTSDs)
     writecsv(joinpath(outdir, "Feature_CV2s.csv"), Feature_CV2s)
     writecsv(joinpath(outdir, "Feature_NoZeros.csv"), Feature_NoZeros)
 end
@@ -71,6 +74,9 @@ function stats(binfile::AbstractString, pseudocount::Number)
     v = zeros(N)
     lv = zeros(N)
     fttv = zeros(N)
+    sd = zeros(N)
+    lsd = zeros(N)
+    fttsd = zeros(N)
     c = zeros(N)
     nz = zeros(N)
     progress = Progress(N)
@@ -88,6 +94,9 @@ function stats(binfile::AbstractString, pseudocount::Number)
             v[n] = var(x)
             lv[n] = var(log10.(x .+ pseudocount))
             fttv[n] = var(sqrt.(x) .+ sqrt.(x .+ 1))
+            sd[n] = var(x)^(1/2)
+            lsd[n] = var(log10.(x .+ pseudocount))^(1/2)
+            fttsd[n] = var(sqrt.(x) .+ sqrt.(x .+ 1))^(1/2)
             c[n] = v[n] / m[n]^2
             for mm = 1:M
                 if x[mm] != 0
@@ -99,5 +108,5 @@ function stats(binfile::AbstractString, pseudocount::Number)
         end
         close(stream)
     end
-    return m, lm, fttm, v, lv, fttv, c, nz
+    return m, lm, fttm, v, lv, fttv, sd, lsd, fttsd, c, nz
 end
