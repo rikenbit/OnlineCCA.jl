@@ -49,7 +49,7 @@ csv2bin(csvfile=joinpath(tmp, "Y.csv"),
 csv2bin(csvfile=joinpath(tmp, "Z.csv"),
   binfile=joinpath(tmp, "Z.zst"))
 
-testfilesize(true, joinpath(tmp, "X.zst"))
+testfilesize(false, joinpath(tmp, "X.zst"))
 testfilesize(true, joinpath(tmp, "Y.zst"))
 testfilesize(true, joinpath(tmp, "Z.zst"))
 ####################################
@@ -63,24 +63,37 @@ testfilesize(true, joinpath(tmp, "Z.zst"))
 # #####################################
 
 
-# #####################################
-# println("####### Summarization (Julia API) #######")
-# sumr(binfile=joinpath(tmp, "XY.zst"), outdir=tmp)
+#####################################
+println("####### Summarization (Julia API) #######")
+mkdir(joinpath(tmp, "SumX"))
+mkdir(joinpath(tmp, "SumY"))
+mkdir(joinpath(tmp, "SumZ"))
+sumr(binfile=joinpath(tmp, "X.zst"), outdir=joinpath(tmp, "SumX"))
+sumr(binfile=joinpath(tmp, "Y.zst"), outdir=joinpath(tmp, "SumY"))
+sumr(binfile=joinpath(tmp, "Z.zst"), outdir=joinpath(tmp, "SumZ"))
 
-# testfilesize(true,
-#   joinpath(tmp, "X_Sample_NoCounts.csv"),
-#   joinpath(tmp, "Y_Sample_NoCounts.csv"),
-#   joinpath(tmp, "X_Feature_CV2s.csv"),
-#   joinpath(tmp, "Y_Feature_CV2s.csv"),
-#   joinpath(tmp, "X_Feature_LogMeans.csv"),
-#   joinpath(tmp, "Y_Feature_LogMeans.csv"),
-#   joinpath(tmp, "X_Feature_Means.csv"),
-#   joinpath(tmp, "Y_Feature_Means.csv"),
-#   joinpath(tmp, "X_Feature_NoZeros.csv"),
-#   joinpath(tmp, "Y_Feature_NoZeros.csv"),
-#   joinpath(tmp, "X_Feature_Vars.csv"),
-#   joinpath(tmp, "Y_Feature_Vars.csv"))
-# ####################################
+testfilesize(true,
+  joinpath(tmp, "SumX/Sample_NoCounts.csv"),
+  joinpath(tmp, "SumX/Feature_CV2s.csv"),
+  joinpath(tmp, "SumX/Feature_LogMeans.csv"),
+  joinpath(tmp, "SumX/Feature_Means.csv"),
+  joinpath(tmp, "SumX/Feature_NoZeros.csv"),
+  joinpath(tmp, "SumX/Feature_Vars.csv"))
+testfilesize(true,
+  joinpath(tmp, "SumY/Sample_NoCounts.csv"),
+  joinpath(tmp, "SumY/Feature_CV2s.csv"),
+  joinpath(tmp, "SumY/Feature_LogMeans.csv"),
+  joinpath(tmp, "SumY/Feature_Means.csv"),
+  joinpath(tmp, "SumY/Feature_NoZeros.csv"),
+  joinpath(tmp, "SumY/Feature_Vars.csv"))
+testfilesize(true,
+  joinpath(tmp, "SumZ/Sample_NoCounts.csv"),
+  joinpath(tmp, "SumZ/Feature_CV2s.csv"),
+  joinpath(tmp, "SumZ/Feature_LogMeans.csv"),
+  joinpath(tmp, "SumZ/Feature_Means.csv"),
+  joinpath(tmp, "SumZ/Feature_NoZeros.csv"),
+  joinpath(tmp, "SumZ/Feature_Vars.csv"))
+####################################
 
 
 # #####################################
