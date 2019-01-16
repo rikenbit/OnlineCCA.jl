@@ -10,10 +10,10 @@ OnlineCCA.jl binarizes multiple CSV files, summarizes the information of data ma
 - RSGD-CCA
 
 ## Learning Parameter Scheduling
-- Robbins-Monro : Herbert Robbins, et. al., 1951
-- Momentum : Ning Qian, 1999
-- Nesterov's Accelerated Gradient Descent（NAG） : Nesterov, 1983
-- ADAGRAD : John Duchi, et. al., 2011
+- Robbins-Monro : [Herbert Robbins, et. al., 1951](https://projecteuclid.org/download/pdf_1/euclid.aoms/1177729586)
+- Momentum : [Ning Qian, 1999](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.57.5612&rep=rep1&type=pdf)
+- Nesterov's Accelerated Gradient Descent（NAG） : [Nesterov, 1983](https://scholar.google.com/scholar?cluster=9343343034975135646&hl=en&oi=scholarr)
+- ADAGRAD : [John Duchi, et. al., 2011](http://www.jmlr.org/papers/volume12/duchi11a/duchi11a.pdf)
 
 ## Installation
 <!-- ```julia
