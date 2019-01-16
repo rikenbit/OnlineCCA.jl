@@ -23,7 +23,7 @@ using Distributions:
 using CodecZstd:
   ZstdCompressorStream, ZstdDecompressorStream
 
-export output, common_parse_commandline, csv2bin, sumr, filtering, hvg, sgd, oja, ccipca, gd, rsgd, svrg, rsvrg, halko, oocpca
+export output, common_parse_commandline, csv2bin, sumr, filtering, sgd, gd, rsgd
 
 include("Utils.jl")
 include("csv2bin.jl")
