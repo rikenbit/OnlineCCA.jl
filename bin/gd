@@ -91,6 +91,8 @@ function main()
     end
     colmeanlist = split(parsed_args["colmeanlist"], ",")
 
+
+    @show parsed_args["colvarlist"]
     if parsed_args["colvarlist"] == ""
         colvarlist = ""
     else
