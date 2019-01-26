@@ -91,8 +91,8 @@ function main()
     end
     colmeanlist = split(parsed_args["colmeanlist"], ",")
 
-    if parsed_args["colvarlist"] == nothing
-        colvarlist = nothing
+    if parsed_args["colvarlist"] == ""
+        colvarlist = ""
     else
         colvarlist = split(parsed_args["colvarlist"], ",")
     end
