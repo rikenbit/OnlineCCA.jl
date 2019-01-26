@@ -487,10 +487,6 @@ function init(input::AbstractArray, pseudocount::AbstractArray, stepsize::Number
 	if !(length(input) >= 2)
         error("Please specify the input as length-2 or longer array (e.g. [\"X.zst\",\"Y.zst\",\"Z.zst\"]).")
 	end
-    @show input
-    @show pseudocount
-    @show colmeanlist
-    @show colvarlist
     check1 = length(input) == length(pseudocount)
     check2 = length(input) == length(colmeanlist)
     check3 = true
