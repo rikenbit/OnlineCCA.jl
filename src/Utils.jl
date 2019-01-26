@@ -117,7 +117,7 @@ function parse_commandline(cca::OOCMCCA)
         "--offsetStoch"
             help = "Off set value for avoding overflow when calculating stochastic gradient"
             arg_type = Union{Number,AbstractString}
-            default = 1.0f-6
+            default = 1.0f-20
         "--initW"
             help = "The CSV file saving the initial values of eigenvectors."
             arg_type = Union{Nothing,AbstractString,}
@@ -184,7 +184,7 @@ function parse_commandline(cca::Union{HORST,ORTHITER})
         "--offsetStoch"
             help = "Off set value for avoding overflow when calculating stochastic gradient"
             arg_type = Union{Number,AbstractString}
-            default = 1.0f-6
+            default = 1.0f-20
         "--initW"
             help = "The CSV file saving the initial values of eigenvectors."
             arg_type = Union{Nothing,AbstractString,}
@@ -275,7 +275,7 @@ function parse_commandline(cca::Union{GD,SGD,RSGD})
         "--offsetStoch"
             help = "Off set value for avoding overflow when calculating stochastic gradient"
             arg_type = Union{Number,AbstractString}
-            default = 1.0f-6
+            default = 1.0f-20
         "--initW"
             help = "The CSV file saving the initial values of eigenvectors."
             arg_type = Union{Nothing,AbstractString,}

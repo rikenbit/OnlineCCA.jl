@@ -61,8 +61,8 @@ function main()
         offsetFull=parse(Float32, parsed_args["offsetFull"])
     end
 
-    if parsed_args["offsetStoch"] == 1.0f-6
-        offsetStoch = 1.0f-6
+    if parsed_args["offsetStoch"] == 1f-20
+        offsetStoch = 1f-20
     else
         offsetStoch=parse(Float32, parsed_args["offsetStoch"])
     end
