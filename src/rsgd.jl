@@ -1,5 +1,5 @@
 """
-    rsgd(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{AbstractString,AbstractArray}="", dim::Number=3, stepsize::Number=0.1, numbatch::Number=100, numepoch::Number=3, scheduling::AbstractString="robbins-monro", g::Number=0.9, epsilon::Number=1.0e-8, lower::Number=0, upper::Number=1.0f+38, evalfreq::Number=5000, offsetFull::Number=1f-20, offsetStoch::Number=1f-6, initW::Union{Nothing,AbstractArray}=nothing, logdir::Union{Nothing,AbstractString}=nothing, perm::Bool=false)
+    rsgd(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{Nothing,AbstractString,AbstractArray}="", dim::Number=3, stepsize::Number=0.1, numbatch::Number=100, numepoch::Number=3, scheduling::AbstractString="robbins-monro", g::Number=0.9, epsilon::Number=1.0e-8, lower::Number=0, upper::Number=1.0f+38, evalfreq::Number=5000, offsetFull::Number=1f-20, offsetStoch::Number=1f-20, initW::Union{Nothing,AbstractArray}=nothing, logdir::Union{Nothing,AbstractString}=nothing, perm::Bool=false)
 Online CCA solved by stochastic gradient descent method.
 Input Arguments
 ---------
@@ -28,14 +28,14 @@ Output Arguments
 ---------
 - `W` : Eigen vectors of covariance matrix (No. columns of the data matrix × dim)
 - `λ` : Eigen values (dim × dim)
-- `V` : Loading vectors of covariance matrix (No. rows of the data matrix × dim)
+- `V` : Latent variables of covariance matrix (No. rows of the data matrix × dim)
 - `ExpCorVar` : Explained correlation/variance by the eigenvectors
 - `TotalCorVar` : Total correlation/variance of the data matrix
 - `Objective` : The summation of object function (e.g. w_i' X_i' X_j w_j)
 - `AvgLatentCor` : The mean of correlation efficient of latent variables (e.g. cor(X_i w_i, X_j w_j))
 - stop : Whether the calculation is converged
 """
-function rsgd(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{AbstractString,AbstractArray}="", dim::Number=3, stepsize::Number=0.1, numbatch::Number=100, numepoch::Number=3, scheduling::AbstractString="robbins-monro", g::Number=0.9, epsilon::Number=1.0e-8, lower::Number=0, upper::Number=1.0f+38, evalfreq::Number=5000, offsetFull::Number=1f-20, offsetStoch::Number=1f-6, initW::Union{Nothing,AbstractArray}=nothing, logdir::Union{Nothing,AbstractString}=nothing, perm::Bool=false)
+function rsgd(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{Nothing,AbstractString,AbstractArray}="", dim::Number=3, stepsize::Number=0.1, numbatch::Number=100, numepoch::Number=3, scheduling::AbstractString="robbins-monro", g::Number=0.9, epsilon::Number=1.0e-8, lower::Number=0, upper::Number=1.0f+38, evalfreq::Number=5000, offsetFull::Number=1f-20, offsetStoch::Number=1f-20, initW::Union{Nothing,AbstractArray}=nothing, logdir::Union{Nothing,AbstractString}=nothing, perm::Bool=false)
     # Initial Setting
     cca = RSGD()
     if scheduling == "robbins-monro"

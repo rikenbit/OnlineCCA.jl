@@ -54,8 +54,7 @@ testfilesize(false, joinpath(tmp, "Y.zst"))
 testfilesize(false, joinpath(tmp, "Z.zst"))
 ####################################
 
-
-#####################################
+####################################
 println("####### Binarization (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "csv2bin")) --csvfile $(joinpath(tmp, "X.csv")) --binfile $(joinpath(tmp, "X.zst"))`)
 run(`$(julia) $(joinpath(bindir, "csv2bin")) --csvfile $(joinpath(tmp, "Y.csv")) --binfile $(joinpath(tmp, "Y.zst"))`)
@@ -64,10 +63,9 @@ run(`$(julia) $(joinpath(bindir, "csv2bin")) --csvfile $(joinpath(tmp, "Z.csv"))
 testfilesize(false, joinpath(tmp, "X.zst"))
 testfilesize(false, joinpath(tmp, "Y.zst"))
 testfilesize(false, joinpath(tmp, "Z.zst"))
-#####################################
+####################################
 
-
-#####################################
+####################################
 println("####### Summarization (Julia API) #######")
 mkdir(joinpath(tmp, "SumrX"))
 mkdir(joinpath(tmp, "SumrY"))
@@ -158,8 +156,7 @@ testfilesize(false,
   joinpath(tmp, "SumrZ/Row_NoCounts.csv"))
 ####################################
 
-
-#####################################
+####################################
 println("####### Summarization (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "sumr")) --binfile $(joinpath(tmp, "X.zst")) --outdir $(joinpath(tmp, "SumrX"))`)
 run(`$(julia) $(joinpath(bindir, "sumr")) --binfile $(joinpath(tmp, "Y.zst")) --outdir $(joinpath(tmp, "SumrY"))`)
@@ -242,9 +239,9 @@ testfilesize(false,
   joinpath(tmp, "SumrZ/Row_CV2s.csv"),
   joinpath(tmp, "SumrZ/Row_NoZeros.csv"),
   joinpath(tmp, "SumrZ/Row_NoCounts.csv"))
-#####################################
+####################################
 
-#####################################
+####################################
 println("####### GD (Julia API) #######")
 out_gd1 = gd(
   input=[joinpath(tmp, "X.zst"),
@@ -409,9 +406,9 @@ out_gd4 = gd(
 @test size(out_gd4[7][2]) == ()
 @test size(out_gd4[7][3]) == ()
 @test size(out_gd4[8]) == ()
-#####################################
+####################################
 
-#####################################
+####################################
 println("####### GD (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -425,9 +422,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -441,9 +438,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -457,9 +454,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "gd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -473,12 +470,12 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
-#######################################
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
+####################################
 
-#######################################
+####################################
 println("####### SGD (Julia API) #######")
 out_sgd1 = sgd(
   input=[joinpath(tmp, "X.zst"),
@@ -644,10 +641,9 @@ out_sgd4 = sgd(
 @test size(out_sgd4[7][2]) == ()
 @test size(out_sgd4[7][3]) == ()
 @test size(out_sgd4[8]) == ()
-#######################################
+####################################
 
-
-#####################################
+####################################
 println("####### SGD (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -661,9 +657,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -677,9 +673,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -693,9 +689,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "sgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -709,12 +705,12 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
-#######################################
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
+####################################
 
-#######################################
+####################################
 println("####### RSGD (Julia API) #######")
 out_rsgd1 = rsgd(
   input=[joinpath(tmp, "X.zst"),
@@ -880,10 +876,9 @@ out_rsgd4 = rsgd(
 @test size(out_rsgd4[7][2]) == ()
 @test size(out_rsgd4[7][3]) == ()
 @test size(out_rsgd4[8]) == ()
-#######################################
+####################################
 
-
-#####################################
+####################################
 println("####### RSGD (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling robbins-monro --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -897,9 +892,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling momentum --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -913,9 +908,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling nag --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -929,9 +924,9 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
 
 run(`$(julia) $(joinpath(bindir, "rsgd")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --scheduling adagrad --stepsize 1.0e-15 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -945,12 +940,12 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
-#######################################
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
+####################################
 
-#######################################
+####################################
 println("####### Orthogonal Iteration (Julia API) #######")
 out_orthiter = orthiter(
   input=[joinpath(tmp, "X.zst"),
@@ -990,9 +985,9 @@ out_orthiter = orthiter(
 @test size(out_orthiter[7][2]) == ()
 @test size(out_orthiter[7][3]) == ()
 @test size(out_orthiter[8]) == ()
-#######################################
+####################################
 
-#####################################
+####################################
 println("####### Orthogonal Iteration (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "orthiter")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -1006,12 +1001,12 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
-#######################################
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
+####################################
 
-#######################################
+####################################
 println("####### Horst-Jacobi algorithm (Julia API) #######")
 out_horst = horst(
   input=[joinpath(tmp, "X.zst"),
@@ -1051,9 +1046,9 @@ out_horst = horst(
 @test size(out_horst[7][2]) == ()
 @test size(out_horst[7][3]) == ()
 @test size(out_horst[8]) == ()
-#######################################
+####################################
 
-#####################################
+####################################
 println("####### Horst-Jacobi algorithm (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "horst")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv")) --logdir $(tmp)`)
 
@@ -1067,12 +1062,12 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
-#######################################
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
+####################################
 
-#######################################
+####################################
 println("####### Out-of-core Multi-set CCA (Julia API) #######")
 out_oocmcca = oocmcca(
   input=[joinpath(tmp, "X.zst"),
@@ -1109,9 +1104,9 @@ out_oocmcca = oocmcca(
 @test size(out_oocmcca[7][1]) == ()
 @test size(out_oocmcca[7][2]) == ()
 @test size(out_oocmcca[7][3]) == ()
-#######################################
+####################################
 
-#####################################
+####################################
 println("####### Out-of-core Multi-set CCA (Command line) #######")
 run(`$(julia) $(joinpath(bindir, "oocmcca")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst"))","$(joinpath(tmp, "Z.zst")) --scale ftt,ftt,ftt --pseudocount 1.0,1.0,1.0 --outdir $(tmp) --dim 3 --numepoch 3 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTMeans.csv")) --colvarlist $(joinpath(tmp, "SumrX/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrY/Col_FTTVars.csv"))","$(joinpath(tmp, "SumrZ/Col_FTTVars.csv"))`)
 
@@ -1125,7 +1120,7 @@ testfilesize(true,
   joinpath(tmp, "ExpCorVar1.csv"),
   joinpath(tmp, "ExpCorVar2.csv"),
   joinpath(tmp, "ExpCorVar3.csv"),
-  joinpath(tmp, "Loadings1.csv"),
-  joinpath(tmp, "Loadings2.csv"),
-  joinpath(tmp, "Loadings3.csv"))
-#######################################
+  joinpath(tmp, "LatentVariables1.csv"),
+  joinpath(tmp, "LatentVariables2.csv"),
+  joinpath(tmp, "LatentVariables3.csv"))
+####################################

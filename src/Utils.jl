@@ -39,7 +39,7 @@ function output(outdir::AbstractString, out::Tuple, cca::Union{GD,SGD,RSGD,HORST
     for i = 1:l
         writecsv(joinpath(outdir, "Eigen_vectors"*string(i)*".csv"), out[1][i])
         writecsv(joinpath(outdir, "Eigen_values"*string(i)*".csv"), out[2][i])
-        writecsv(joinpath(outdir, "Loadings"*string(i)*".csv"), out[3][i])
+        writecsv(joinpath(outdir, "LatentVariables"*string(i)*".csv"), out[3][i])
         writecsv(joinpath(outdir, "ExpCorVar"*string(i)*".csv"), out[4][i])
         writecsv(joinpath(outdir, "TotalCorVar"*string(i)*".csv"), out[5][i])
         writecsv(joinpath(outdir, "Objective"*string(i)*".csv"), out[6][i])
@@ -56,7 +56,7 @@ function output(outdir::AbstractString, out::Tuple, cca::OOCMCCA)
     for i = 1:l
         writecsv(joinpath(outdir, "Eigen_vectors"*string(i)*".csv"), out[1][i])
         writecsv(joinpath(outdir, "Eigen_values"*string(i)*".csv"), out[2][i])
-        writecsv(joinpath(outdir, "Loadings"*string(i)*".csv"), out[3][i])
+        writecsv(joinpath(outdir, "LatentVariables"*string(i)*".csv"), out[3][i])
         writecsv(joinpath(outdir, "ExpCorVar"*string(i)*".csv"), out[4][i])
         writecsv(joinpath(outdir, "TotalCorVar"*string(i)*".csv"), out[5][i])
         writecsv(joinpath(outdir, "Objective"*string(i)*".csv"), out[6][i])
@@ -314,7 +314,7 @@ function nm(input::AbstractArray)
 end
 
 # Initialization
-function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{AbstractString,AbstractArray}, initW::Union{Nothing,AbstractArray}, cca::Union{OOCMCCA}, offsetStoch::Number, scale::AbstractArray)
+function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{Nothing,AbstractString,AbstractArray}, initW::Union{Nothing,AbstractArray}, cca::Union{OOCMCCA}, offsetStoch::Number, scale::AbstractArray)
     if !(length(input) >= 2)
         error("Please specify the input as length-2 or longer array (e.g. [\"X.zst\", \"Y.zst\", \"Z.zst\"]).")
     end
@@ -394,7 +394,7 @@ function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, col
 end
 
 # Initialization
-function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{AbstractString,AbstractArray}, initW::Union{Nothing,AbstractArray}, logdir::Union{Nothing,AbstractString}, cca::Union{HORST,ORTHITER}, lower::Number, upper::Number, evalfreq::Number, offsetStoch::Number, scale::AbstractArray)
+function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{Nothing,AbstractString,AbstractArray}, initW::Union{Nothing,AbstractArray}, logdir::Union{Nothing,AbstractString}, cca::Union{HORST,ORTHITER}, lower::Number, upper::Number, evalfreq::Number, offsetStoch::Number, scale::AbstractArray)
     if !(length(input) >= 2)
         error("Please specify the input as length-2 or longer array (e.g. [\"X.zst\", \"Y.zst\", \"Z.zst\"]).")
     end

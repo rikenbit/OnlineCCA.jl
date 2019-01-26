@@ -1,5 +1,5 @@
 """
-    oocmcca(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{AbstractString,AbstractArray}="", dim::Number=3, lower::Number=0, upper::Number=1.0f+38, offsetStoch::Number=1f-20, initW::Union{Nothing,AbstractArray}=nothing, perm::Bool=false)
+    oocmcca(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{Nothing,AbstractString,AbstractArray}="", dim::Number=3, lower::Number=0, upper::Number=1.0f+38, offsetStoch::Number=1f-20, initW::Union{Nothing,AbstractArray}=nothing, perm::Bool=false)
 Online CCA solved by Out-of-core CCA.
 Input Arguments
 ---------
@@ -19,13 +19,13 @@ Output Arguments
 ---------
 - `W` : Eigen vectors of covariance matrix (No. columns of the data matrix × dim)
 - `λ` : Eigen values (dim × dim)
-- `V` : Loading vectors of covariance matrix (No. rows of the data matrix × dim)
+- `V` : Latent variables of covariance matrix (No. rows of the data matrix × dim)
 - `ExpCorVar` : Explained correlation/variance by the eigenvectors
 - `TotalCorVar` : Total correlation/variance of the data matrix
 - `Objective` : The summation of object function (e.g. w_i' X_i' X_j w_j)
 - `AvgLatentCor` : The mean of correlation efficient of latent variables (e.g. cor(X_i w_i, X_j w_j))
 """
-function oocmcca(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{AbstractString,AbstractArray}="", dim::Number=3, lower::Number=0, upper::Number=1.0f+38, offsetStoch::Number=1f-6, initW::Union{Nothing,AbstractArray}=nothing, perm::Bool=false)
+function oocmcca(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{Nothing,AbstractString,AbstractArray}="", dim::Number=3, lower::Number=0, upper::Number=1.0f+38, offsetStoch::Number=1f-20, initW::Union{Nothing,AbstractArray}=nothing, perm::Bool=false)
     # Initial Setting
     cca = OOCMCCA()
     pseudocount, W, v, D, colmeanlist, colmeanvec, colvarlist, colvarvec, N, M, TotalCorVar, offsetStoch = init(input, pseudocount, dim, colmeanlist, colvarlist, initW, cca, offsetStoch, scale)

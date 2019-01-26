@@ -8,7 +8,7 @@ Except for SIMPLS, multiple (over three) datasets can be specified against each 
 
 Contrary to PCA, which is the eigenvalue problem of the covariance matrix w'X'Xw with the constraint condition norm(w) = 1, CCA is solved as the generalized eigenvalue problem of the cross-product matrix w'X'Yv with the constraint condition cor(Xw, Yv) = 1.
 
-When the column vectors of X and Y is standarized (mean 0, variance 1), the problem is simplified as the eigenvalue problem of the cross-product matrix w'X'Yv with the constraint condition norm(w) = norm(v) = 1 and called Orthogonal CCA. When the column vectors of X and Y is centerized (mean 0), this problem is also known as PLS-SVD. OnlineCCA.jl can perform both approarches by the specifying the arguments "colmeanlist" and "colmeanlist".
+When the column vectors of the matrices X and Y are standarized (mean 0, variance 1), the problem is simplified as the eigenvalue problem of the cross-product matrix [ I, w'X'Yv ; v'Y'Xw, I ] with the constraint condition norm(w) = norm(v) = 1 and called Orthogonal CCA. When the column vectors of X and Y is centerized (mean 0), this problem is also known as PLS-SVD. OnlineCCA.jl can perform both approarches by specifying whether the arguments "colvarlist" as local csv file or nothing.
 
 It is known that simultaneous orthogonalization of both w (eigenvectors) and Xw (latent variables) is difficult. When using the latent variables for prediction problem such as regression/discriminant analysis, the orthogonalization of latent variables is preferred from the viewpoint of the multicolinearity (cf. PLS-R, PLS-DA, NIPALS, SIMPLS, and O2PLS). OnlineCCA.jl provides SIMPLS for such approarch.
 
@@ -20,8 +20,7 @@ It is known that simultaneous orthogonalization of both w (eigenvectors) and Xw 
 		- RSGD-CCA
 	- Krylov subspace-based
 		- Orthgonal Iteration (A power method to calculate multiple eigenvectors at once)
-		- HOrst Iteration (Horst-Jacobi algorithm)
-		- Witten's method
+		- Horst Iteration (Horst-Jacobi algorithm)
 	- Random projection-based
 		- oocCCA (Out-of-core CCA)
 - Orthogonal latent variables-type
@@ -58,7 +57,16 @@ julia> Pkg.add("OnlineCCA")
 ### SGD-CCA
 ...
 
-### RSGD-CCA
+### Orthgonal Iteration
+...
+
+### Horst Iteration
+...
+
+### oocCCA
+...
+
+### SIMPLS
 ...
 
 ## Command line usage
