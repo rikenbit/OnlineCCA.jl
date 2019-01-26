@@ -1,0 +1,41 @@
+using OnlineCCA
+using ArgParse:
+    ArgParseSettings, parse_args, @add_arg_table
+
+# options
+function parse_commandline()
+    s = ArgParseSettings()
+
+    @add_arg_table s begin
+        "--binfile", "-b"
+            help = "input file (serialized)"
+            arg_type = AbstractString
+            required = true
+        "--outdir", "-o"
+            help = "output directory"
+            arg_type = AbstractString
+            default = "."
+            required = false
+        "--pseudocount", "-p"
+            help = "log10(exp + pseudocount)"
+            arg_type = Union{Number,AbstractString}
+            default = 1.0
+    end
+
+    return parse_args(s)
+end
+
+# main
+function main()
+    parsed_args = parse_commandline()
+    println("Parsed args:")
+    for (arg,val) in parsed_args
+        println("  $arg  =>  $val")
+    end
+
+    pseudocount = Float32(parsed_args["pseudocount"])
+
+    sumr(binfile=parsed_args["binfile"], outdir=parsed_args["outdir"], pseudocount=pseudocount)
+end
+
+main()

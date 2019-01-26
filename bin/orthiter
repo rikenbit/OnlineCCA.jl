@@ -4,7 +4,7 @@ using ArgParse:
 
 # main
 function main()
-    cca = OnlineCCA.GD()
+    cca = OnlineCCA.ORTHITER()
     parsed_args = OnlineCCA.parse_commandline(cca)
     println("Parsed args:")
     for (arg, val) in parsed_args
@@ -13,28 +13,10 @@ function main()
 
     dim=parse(Int64, parsed_args["dim"])
 
-    if parsed_args["stepsize"] == 1.0f3
-        stepsize = 1.0f3
-    else
-        stepsize=parse(Float32, parsed_args["stepsize"])
-    end
-
     if parsed_args["numepoch"] == 5
         numepoch = 5
     else
         numepoch=parse(Int64, parsed_args["numepoch"])
-    end
-
-    if parsed_args["g"] == 0.9f0
-        g = 0.9f0
-    else
-        g=parse(Float32, parsed_args["g"])
-    end
-
-    if parsed_args["epsilon"] == 1.0f-8
-        epsilon = 1.0f-8
-    else
-        epsilon=parse(Float32, parsed_args["epsilon"])
     end
 
     if parsed_args["lower"] == 0
@@ -53,12 +35,6 @@ function main()
         evalfreq = 5000
     else
         evalfreq=parse(Int64, parsed_args["evalfreq"])
-    end
-
-    if parsed_args["offsetFull"] == 1.0f-20
-        offsetFull = 1.0f-20
-    else
-        offsetFull=parse(Float32, parsed_args["offsetFull"])
     end
 
     if parsed_args["offsetStoch"] == 1.0f-6
@@ -103,21 +79,16 @@ function main()
         initW = split(parsed_args["initW"], ",")
     end
 
-    out = OnlineCCA.gd(input=input,
+    out = OnlineCCA.orthiter(input=input,
         scale=scale,
         pseudocount=pseudocount,
         colmeanlist=colmeanlist,
         colvarlist=colvarlist,
         dim=dim,
-        stepsize=stepsize,
         numepoch=numepoch,
-        scheduling=parsed_args["scheduling"],
-        g=g,
-        epsilon=epsilon,
         lower=lower,
         upper=upper,
         evalfreq=evalfreq,
-        offsetFull=offsetFull,
         offsetStoch=offsetStoch,
         initW=initW,
         logdir=logdir,

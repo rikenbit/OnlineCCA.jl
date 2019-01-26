@@ -1,0 +1,128 @@
+using OnlineCCA
+using ArgParse:
+    ArgParseSettings, parse_args, @add_arg_table
+
+# main
+function main()
+    cca = OnlineCCA.RSGD()
+    parsed_args = OnlineCCA.parse_commandline(cca)
+    println("Parsed args:")
+    for (arg, val) in parsed_args
+        println("  $arg  =>  ", repr(val))
+    end
+
+    dim=parse(Int64, parsed_args["dim"])
+
+    if parsed_args["stepsize"] == 1.0f3
+        stepsize = 1.0f3
+    else
+        stepsize=parse(Float32, parsed_args["stepsize"])
+    end
+
+    if parsed_args["numepoch"] == 5
+        numepoch = 5
+    else
+        numepoch=parse(Int64, parsed_args["numepoch"])
+    end
+
+    if parsed_args["g"] == 0.9f0
+        g = 0.9f0
+    else
+        g=parse(Float32, parsed_args["g"])
+    end
+
+    if parsed_args["epsilon"] == 1.0f-8
+        epsilon = 1.0f-8
+    else
+        epsilon=parse(Float32, parsed_args["epsilon"])
+    end
+
+    if parsed_args["lower"] == 0
+        lower = 0
+    else
+        lower=parse(Float32, parsed_args["lower"])
+    end
+
+    if parsed_args["upper"] == 1.0f+38
+        upper = 1.0f+38
+    else
+        upper=parse(Float32, parsed_args["upper"])
+    end
+
+    if parsed_args["evalfreq"] == 5000
+        evalfreq = 5000
+    else
+        evalfreq=parse(Int64, parsed_args["evalfreq"])
+    end
+
+    if parsed_args["offsetFull"] == 1.0f-20
+        offsetFull = 1.0f-20
+    else
+        offsetFull=parse(Float32, parsed_args["offsetFull"])
+    end
+
+    if parsed_args["offsetStoch"] == 1.0f-6
+        offsetStoch = 1.0f-6
+    else
+        offsetStoch=parse(Float32, parsed_args["offsetStoch"])
+    end
+
+    if parsed_args["logdir"] == nothing
+        logdir = parsed_args["logdir"]
+    else
+        logdir = String(parsed_args["logdir"])
+    end
+
+    if parsed_args["perm"] == false
+        perm = false
+    elseif parsed_args["perm"] == "true"
+        perm = true
+    else
+        error("Please specify the perm option as true or false")
+    end
+
+    input = split(parsed_args["input"], ",")
+    scale = split(parsed_args["scale"], ",")
+    tmp = split(parsed_args["pseudocount"], ",")
+    pseudocount = Any[]
+    l = length(tmp)
+    for i=1:l
+        push!(pseudocount, parse(Float32, tmp[i]))
+    end
+    colmeanlist = split(parsed_args["colmeanlist"], ",")
+
+    if parsed_args["colvarlist"] == nothing
+        colvarlist = nothing
+    else
+        colvarlist = split(parsed_args["colvarlist"], ",")
+    end
+
+    if parsed_args["initW"] == nothing
+        initW = nothing
+    else
+        initW = split(parsed_args["initW"], ",")
+    end
+
+    out = OnlineCCA.rsgd(input=input,
+        scale=scale,
+        pseudocount=pseudocount,
+        colmeanlist=colmeanlist,
+        colvarlist=colvarlist,
+        dim=dim,
+        stepsize=stepsize,
+        numepoch=numepoch,
+        scheduling=parsed_args["scheduling"],
+        g=g,
+        epsilon=epsilon,
+        lower=lower,
+        upper=upper,
+        evalfreq=evalfreq,
+        offsetFull=offsetFull,
+        offsetStoch=offsetStoch,
+        initW=initW,
+        logdir=logdir,
+        perm=perm)
+    OnlineCCA.output(parsed_args["outdir"], out, cca)
+end
+
+main()
