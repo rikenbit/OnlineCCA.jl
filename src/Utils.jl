@@ -485,8 +485,12 @@ end
 # Initialization
 function init(input::AbstractArray, pseudocount::AbstractArray, stepsize::Number, g::Number, epsilon::Number, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{AbstractString,AbstractArray}, initW::Union{Nothing,AbstractArray}, logdir::Union{Nothing,AbstractString}, cca::Union{GD,SGD,RSGD}, lower::Number, upper::Number, evalfreq::Number, offsetFull::Number, offsetStoch::Number, scale::AbstractArray)
 	if !(length(input) >= 2)
-        error("Please specify the input as length-2 or longer array (e.g. [\"X.zst\", \"Y.zst\", \"Z.zst\"]).")
+        error("Please specify the input as length-2 or longer array (e.g. [\"X.zst\",\"Y.zst\",\"Z.zst\"]).")
 	end
+    @show input
+    @show pseudocount
+    @show colmeanlist
+    @show colvarlist
     check1 = length(input) == length(pseudocount)
     check2 = length(input) == length(colmeanlist)
     check3 = true
