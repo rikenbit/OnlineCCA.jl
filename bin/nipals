@@ -37,12 +37,6 @@ function main()
         offsetStoch=parse(Float32, parsed_args["offsetStoch"])
     end
 
-    if parsed_args["logdir"] == nothing
-        logdir = parsed_args["logdir"]
-    else
-        logdir = String(parsed_args["logdir"])
-    end
-
     input = split(parsed_args["input"], ",")
     scale = split(parsed_args["scale"], ",")
     tmp = split(parsed_args["pseudocount"], ",")
@@ -68,8 +62,7 @@ function main()
         numepoch=numepoch,
         lower=lower,
         upper=upper,
-        offsetStoch=offsetStoch,
-        logdir=logdir)
+        offsetStoch=offsetStoch)
     OnlineCCA.output(parsed_args["outdir"], out, cca)
 end
 

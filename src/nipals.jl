@@ -15,7 +15,6 @@ Input Arguments
 - `upper` : Stopping Criteria (When the relative change of error is above this value, the calculation is terminated)
 - `evalfreq` : Evaluation Frequency of Reconstruction Error
 - `offsetStoch` : Off set value for avoding overflow when calculating stochastic gradient
-- `logdir` : The directory where intermediate files are saved, in every evalfreq (e.g. 5000) iteration.
 ---------
 - `T` : = (t1,t2,...,tK) (No. columns of X × dim), the score vectors of X
 - `P` : = (p1,p2,...,pK) (No. rows of X × dim), the loading of X
@@ -26,16 +25,16 @@ Input Arguments
 function nipals(;input::AbstractArray=[], outdir::Union{Nothing,AbstractString}=nothing, scale::AbstractArray=[], pseudocount::AbstractArray=[], colmeanlist::AbstractArray="", colvarlist::Union{Nothing,AbstractString,AbstractArray}="", dim::Number=3, numepoch::Number=3, lower::Number=0, upper::Number=1.0f+38, offsetStoch::Number=1f-20, logdir::Union{Nothing,AbstractString}=nothing)
     # Initial Setting
     cca = NIPALS()
-    pseudocount, W, v, D, colmeanlist, colmeanvec, colvarlist, colvarvec, N, M, TotalCorVar, lower, upper, offsetStoch = init(input, pseudocount, dim, colmeanlist, colvarlist, logdir, cca, lower, upper, offsetStoch, scale)
+    pseudocount, W, v, D, colmeanlist, colmeanvec, colvarlist, colvarvec, N, M, TotalCorVar, lower, upper, offsetStoch = init(input, pseudocount, dim, colmeanlist, colvarlist, cca, lower, upper, offsetStoch, scale)
     # Perform CCA
-    out = nipals(input, outdir, scale, pseudocount, colmeanlist, colvarlist, dim, numepoch, logdir, cca, W, v, D, colmeanvec, colvarvec, N, M, TotalCorVar, lower, upper, offsetStoch)
+    out = nipals(input, outdir, scale, pseudocount, colmeanlist, colvarlist, dim, numepoch, cca, W, v, D, colmeanvec, colvarvec, N, M, TotalCorVar, lower, upper, offsetStoch)
     if outdir isa String
         output(outdir, out, cca)
     end
     return out
 end
 
-function nipals(input, outdir, scale, pseudocount, colmeanlist, colvarlist, dim, numepoch, logdir, cca, W, v, D, colmeanvec, colvarvec, N, M, TotalCorVar, lower, upper, offsetStoch)
+function nipals(input, outdir, scale, pseudocount, colmeanlist, colvarlist, dim, numepoch, cca, W, v, D, colmeanvec, colvarvec, N, M, TotalCorVar, lower, upper, offsetStoch)
     @assert length(input) == 2
     l = 2
     N, M = nm(input)

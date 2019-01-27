@@ -262,10 +262,6 @@ function parse_commandline(cca::NIPALS)
             help = "Off set value for avoding overflow when calculating stochastic gradient"
             arg_type = Union{Number,AbstractString}
             default = 1.0f-20
-        "--logdir", "-l"
-            help = "The directory where intermediate files are saved, in every evalfreq (e.g. 5000) iteration."
-            arg_type = Union{Nothing,AbstractString}
-            default = nothing
     end
 
     return parse_args(s)
@@ -552,7 +548,7 @@ function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, col
 end
 
 # Initialization
-function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{Nothing,AbstractString,AbstractArray}, logdir::Union{Nothing,AbstractString}, cca::NIPALS, lower::Number, upper::Number, offsetStoch::Number, scale::AbstractArray)
+function init(input::AbstractArray, pseudocount::AbstractArray, dim::Number, colmeanlist::AbstractArray, colvarlist::Union{Nothing,AbstractString,AbstractArray}, cca::NIPALS, lower::Number, upper::Number, offsetStoch::Number, scale::AbstractArray)
     if !(length(input) == 2)
         error("Please specify the input as length-2 array (e.g. [\"X.zst\", \"Y.zst\"]).")
     end
