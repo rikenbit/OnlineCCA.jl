@@ -1,0 +1,76 @@
+using OnlineCCA
+using ArgParse:
+    ArgParseSettings, parse_args, @add_arg_table
+
+# main
+function main()
+    cca = OnlineCCA.NIPALS()
+    parsed_args = OnlineCCA.parse_commandline(cca)
+    println("Parsed args:")
+    for (arg, val) in parsed_args
+        println("  $arg  =>  ", repr(val))
+    end
+
+    dim=parse(Int64, parsed_args["dim"])
+
+    if parsed_args["numepoch"] == 5
+        numepoch = 5
+    else
+        numepoch=parse(Int64, parsed_args["numepoch"])
+    end
+
+    if parsed_args["lower"] == 0
+        lower = 0
+    else
+        lower=parse(Float32, parsed_args["lower"])
+    end
+
+    if parsed_args["upper"] == 1.0f+38
+        upper = 1.0f+38
+    else
+        upper=parse(Float32, parsed_args["upper"])
+    end
+
+    if parsed_args["offsetStoch"] == 1f-20
+        offsetStoch = 1f-20
+    else
+        offsetStoch=parse(Float32, parsed_args["offsetStoch"])
+    end
+
+    if parsed_args["logdir"] == nothing
+        logdir = parsed_args["logdir"]
+    else
+        logdir = String(parsed_args["logdir"])
+    end
+
+    input = split(parsed_args["input"], ",")
+    scale = split(parsed_args["scale"], ",")
+    tmp = split(parsed_args["pseudocount"], ",")
+    pseudocount = Any[]
+    l = length(tmp)
+    for i=1:l
+        push!(pseudocount, parse(Float32, tmp[i]))
+    end
+    colmeanlist = split(parsed_args["colmeanlist"], ",")
+
+    if parsed_args["colvarlist"] == ""
+        colvarlist = ""
+    else
+        colvarlist = split(parsed_args["colvarlist"], ",")
+    end
+
+    out = OnlineCCA.nipals(input=input,
+        scale=scale,
+        pseudocount=pseudocount,
+        colmeanlist=colmeanlist,
+        colvarlist=colvarlist,
+        dim=dim,
+        numepoch=numepoch,
+        lower=lower,
+        upper=upper,
+        offsetStoch=offsetStoch,
+        logdir=logdir)
+    OnlineCCA.output(parsed_args["outdir"], out, cca)
+end
+
+main()

@@ -1124,3 +1124,37 @@ testfilesize(true,
   joinpath(tmp, "LatentVariables2.csv"),
   joinpath(tmp, "LatentVariables3.csv"))
 ####################################
+
+####################################
+println("####### NIPALS (Julia API) #######")
+out_nipals = nipals(
+  input=[joinpath(tmp, "X.zst"),
+    joinpath(tmp, "Y.zst")],
+  scale=["ftt", "ftt"],
+  pseudocount=[1.0, 1.0],
+  dim=3,
+  numepoch=10,
+  colmeanlist=[joinpath(tmp, "SumrX/Col_FTTMeans.csv"),
+    joinpath(tmp, "SumrY/Col_FTTMeans.csv")],
+  colvarlist=[joinpath(tmp, "SumrX/Col_FTTVars.csv"),
+    joinpath(tmp, "SumrY/Col_FTTVars.csv")],
+  logdir=tmp)
+
+@test size(out_nipals[1]) == (300, 3)
+@test size(out_nipals[2]) == (30, 3)
+@test size(out_nipals[3]) == (300, 3)
+@test size(out_nipals[4]) == (40, 3)
+@test size(out_nipals[5]) == (3, 3)
+####################################
+
+####################################
+println("####### NIPALS (Command line) #######")
+run(`$(julia) $(joinpath(bindir, "nipals")) --input $(joinpath(tmp, "X.zst"))","$(joinpath(tmp, "Y.zst")) --scale ftt,ftt --pseudocount 1.0,1.0 --outdir $(tmp) --dim 3 --numepoch 10 --colmeanlist $(joinpath(tmp, "SumrX/Col_FTTMeans.csv"))","$(joinpath(tmp, "SumrY/Col_FTTMeans.csv")) --logdir $(tmp)`)
+
+testfilesize(true,
+  joinpath(tmp, "T.csv"),
+  joinpath(tmp, "P.csv"),
+  joinpath(tmp, "U.csv"),
+  joinpath(tmp, "Q.csv"),
+  joinpath(tmp, "B.csv"))
+####################################

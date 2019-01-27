@@ -23,7 +23,7 @@ using Distributions:
 using CodecZstd:
   ZstdCompressorStream, ZstdDecompressorStream
 
-export output, common_parse_commandline, csv2bin, sumr, filtering, sgd, gd, rsgd, horst, orthiter, oocmcca
+export output, common_parse_commandline, csv2bin, sumr, filtering, sgd, gd, rsgd, horst, orthiter, oocmcca, nipals
 
 include("Utils.jl")
 include("csv2bin.jl")
@@ -34,5 +34,6 @@ include("rsgd.jl")
 include("orthiter.jl")
 include("horst.jl")
 include("oocmcca.jl")
+include("nipals.jl")
 
 end

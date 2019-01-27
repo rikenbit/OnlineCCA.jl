@@ -10,10 +10,10 @@ Contrary to PCA, which is the eigenvalue problem of the covariance matrix w'X'Xw
 
 When the column vectors of the matrices X and Y are standarized (mean 0, variance 1), the problem is simplified as the eigenvalue problem of the cross-product matrix [ I, w'X'Yv ; v'Y'Xw, I ] with the constraint condition norm(w) = norm(v) = 1 and called Orthogonal CCA. When the column vectors of X and Y is centerized (mean 0), this problem is also known as PLS-SVD. OnlineCCA.jl can perform both approarches by specifying whether the arguments "colvarlist" as local csv file or nothing.
 
-It is known that simultaneous orthogonalization of both w (eigenvectors) and Xw (latent variables) is difficult. When using the latent variables for prediction problem such as regression/discriminant analysis, the orthogonalization of latent variables is preferred from the viewpoint of the multicolinearity (cf. PLS-R, PLS-DA, NIPALS, SIMPLS, and O2PLS). OnlineCCA.jl provides SIMPLS for such approarch.
+It is known that simultaneous orthogonalization of both w (eigenvectors/loadings/weight) and Xw (latent variables/scores) is difficult. When using the latent variables for prediction problem such as regression/discriminant analysis, the orthogonalization of latent variables is preferred from the viewpoint of the multicolinearity (cf. PLS-R, PLS-DA, NIPALS, SIMPLS, OPLS, and O2PLS). OnlineCCA.jl provides NIPALS to support such approarch.
 
 ## Algorithms
-- Orthogonal Eigenvectors-type
+- Orthogonal eigenvectors-type
 	- Gradient-based
 		- GD-CCA
 		- SGD-CCA
@@ -22,9 +22,9 @@ It is known that simultaneous orthogonalization of both w (eigenvectors) and Xw 
 		- Orthgonal Iteration (A power method to calculate multiple eigenvectors at once)
 		- Horst Iteration (Horst-Jacobi algorithm)
 	- Random projection-based
-		- oocCCA (Out-of-core CCA)
+		- oocMCCA (Out-of-core MCCA)
 - Orthogonal latent variables-type
-	- SIMPLS
+	- NIPALS
 
 ## Learning Parameter Scheduling
 - Robbins-Monro : [Herbert Robbins, et. al., 1951](https://projecteuclid.org/download/pdf_1/euclid.aoms/1177729586)
@@ -63,10 +63,10 @@ julia> Pkg.add("OnlineCCA")
 ### Horst Iteration
 ...
 
-### oocCCA
+### oocMCCA
 ...
 
-### SIMPLS
+### NIPALS
 ...
 
 ## Command line usage
